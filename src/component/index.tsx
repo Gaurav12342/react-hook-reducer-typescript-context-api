@@ -1,27 +1,11 @@
-import React, { FC, createContext, useReducer } from 'react';
+import React, { FC, useReducer } from 'react';
 import FormComponent from '../component/FormComponent';
 import ButtonComponent from '../component/ButtonComponent';
 import AnswerComponent from '../component/AnswerComponent';
+import { useCounter } from './useCounter';
 import { ADDITION, MULTIPLICATION, DIVISION, SUBSTRACTION, ASSIGNVALUE } from '../action/actionsTypes';
-
-interface IInitialState {
-    num1: number,
-    num2: number,
-    result: number
-};
-
-interface IAction {
-    type: string,
-    payload: () => void
-}
-
-interface ICreateContext {
-    handleChange?: (event: React.ChangeEvent<HTMLInputElement>) => void,
-    state?: any,
-    dispatch?: any
-}
-
-export const couterContext = createContext<ICreateContext>({});
+import { IInitialState, IAction } from './counterInterface';
+import { couterContext } from './context';
 
 const RootComponent: FC = () => {
 
@@ -31,35 +15,22 @@ const RootComponent: FC = () => {
         result: 0
     }
 
+    const { valuInitilization, addition, substraction, multiplication, division } = useCounter();
+
     const reducer = (state: IInitialState, action: IAction) => {
         switch (action.type) {
             case ASSIGNVALUE:
-                return {
-                    ...state,
-                    ...action.payload
-                }
+                return valuInitilization(state, action);
             case ADDITION:
-                return {
-                    ...state,
-                    result: +state.num1 + +state.num2
-                }
+                return addition(state);
             case SUBSTRACTION:
-                return {
-                    ...state,
-                    result: +state.num1 - +state.num2
-                }
+                return substraction(state);
 
             case MULTIPLICATION:
-                return {
-                    ...state,
-                    result: +state.num1 * +state.num2
-                }
+                return multiplication(state);
 
             case DIVISION:
-                return {
-                    ...state,
-                    result: +state.num1 / +state.num2
-                }
+                return division(state);
             default:
                 return { ...state }
         }
@@ -71,6 +42,7 @@ const RootComponent: FC = () => {
         const { name, value } = event.target;
         dispatch({ type: ASSIGNVALUE, payload: { ...state, [name]: value } });
     }
+
     return <div>
         <couterContext.Provider value={{ handleChange, state, dispatch }}>
             <FormComponent />

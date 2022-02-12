@@ -1,5 +1,5 @@
 import React, { FC, useContext } from 'react';
-import { couterContext } from '../component/index';
+import { couterContext } from '../component/context';
 
 const FormComponent: FC = () => {
     const formValue = useContext(couterContext);
