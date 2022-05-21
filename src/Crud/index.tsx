@@ -1,21 +1,20 @@
 import React, { createContext, FC, useReducer } from 'react'
 import Form from './Form';
 import { INSERT, INITILIZE_VALUE, UPDATE, DELETE, GET } from '../action/actionsTypes';
+import Table from './Table';
 export interface IInitialState {
     fname?: string;
     lname?: string;
     city?: string;
-    results?: any
+    results?: any;
 }
-
-
 export interface IAction {
     type?: string;
     payload?: any;
 }
 
 export interface IUserContext {
-    state?: IInitialState[],
+    state?: IInitialState,
     dispatch?: any,
     handleChange?: (e: React.ChangeEvent<HTMLInputElement>) => void
 }
@@ -36,13 +35,13 @@ const Crud: FC = () => {
                 return { ...state, ...action.payload }
             case INSERT:
                 return { ...state, results: state.results.concat({ ...state, ...action.payload }) }
+            case DELETE:
+                return { ...state, }
             default:
                 return { ...state }
         }
     }
     const [state, dispatch] = useReducer(reducer, initialState);
-    console.log("State =>", state);
-
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
@@ -54,6 +53,7 @@ const Crud: FC = () => {
             <h1>Crud</h1>
             <userContext.Provider value={{ state, dispatch, handleChange }}>
                 <Form />
+                <Table />
             </userContext.Provider>
         </div>
     )
