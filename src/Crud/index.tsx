@@ -36,7 +36,7 @@ const Crud: FC = () => {
             case INSERT:
                 return { ...state, results: state.results.concat({ ...state, ...action.payload }) }
             case DELETE:
-                return { ...state, }
+                return { ...state, results: state.results.filter((dd: IInitialState) => dd.fname !== state.fname) }
             default:
                 return { ...state }
         }
